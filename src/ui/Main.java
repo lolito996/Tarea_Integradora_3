@@ -59,8 +59,8 @@ public class Main {
 		"<< -                                Welcome                            - >>\n" +
 		"<< --------------------------------------------------------------------- >>\n" +
 		"1. Registrar usuarios productores, artistas y creadores de contenido.\n" +
-		"2. Agregar una persona un carro autonomo\n" + 
-		"3. Ver información de un carro autonomo\n" +
+		"2. Registrar usuarios consumidores, Estandar, Premium \n" + 
+		"3. Reggistrar 	canciones y podcast\n" +
 		"4. Bajar a una persona del carro autonomo\n" +
 		"0. Salir del programa.\n"; 
 	}
@@ -131,65 +131,65 @@ public class Main {
 
 				case 2: 
 				System.out.println("Deseas registrar 1) PREMIUM  o  2) STANDAR");
-					do{	
-						if(reader.hasNextInt()){
-						typeCreator=reader.nextInt();
-						if(typeCreator!=1 && typeCreator!=2){
-							System.out.println("Opcion invalida");
-						}
-						}else{
-							reader.next();
-							System.out.println("Opcion invalida ");
-						}
-					}while(typeCreator!=1 && typeCreator!=2);
-						if(typeCreator==1){
-							System.out.println("Crea un nickName");
-							nickName=reader.next();
-							exist=controller.validateNickName(nickName);
-							if(exist==true){
-								msj="Ya existe este nickName";
-							}	
-							else{
-								System.out.println("cual es  su cedula");
-								id=reader.next();
-								System.out.println("cual es su fecha de vinculación");
-								date=reader.next();
-								Premium premium=new Premium(name,date,url);
-								control=controller.addConsumer(premium);
-								if(control==true){
-									msj="Se creo el usuario Premium";
-
-								}
-								else{
-									msj="No se pudo crear el usuario Premium ";
-								}
-							}
-						}
+				do{	
+					if(reader.hasNextInt()){
+					typeCreator=reader.nextInt();
+					if(typeCreator!=1 && typeCreator!=2){
+						System.out.println("Opcion invalida");
+					}
+					}else{
+						reader.next();
+						System.out.println("Opcion invalida ");
+					}
+				}while(typeCreator!=1 && typeCreator!=2);
+					if(typeCreator==1){
+						System.out.println("Crea un nickName");
+						nickName=reader.next();
+						exist=controller.validateNickName(nickName);
+						if(exist==true){
+							msj="Ya existe este nickName";
+						}	
 						else{
-							System.out.println("Crea un nickName");
-							nickName=reader.next();
-							exist=controller.validateNickName(nickName);
-							if(exist==true){
-								msj="Ya existe este nickName";
-							}	
-							else{
-								System.out.println("cual es  su cedula");
-								id=reader.next();
-								System.out.println("cual es su fecha de vinculación");
-								date=reader.next();
-								Standard standar=new Standard(name,date,url);
-								control=controller.addConsumer(standar);
-								if(control==true){
-									msj="Se creo el usuario Standar";
+							System.out.println("cual es  su cedula");
+							id=reader.next();
+							System.out.println("cual es su fecha de vinculación");
+							date=reader.next();
+							Premium premium=new Premium(name,date,url);
+							control=controller.addConsumer(premium);
+							if(control==true){
+								msj="Se creo el usuario Premium";
 
-								}
-								else{
-									msj="No se pudo crear el usuario Standar ";
-								}
+							}
+							else{
+								msj="No se pudo crear el usuario Premium ";
 							}
 						}
+					}
+					else{
+						System.out.println("Crea un nickName");
+						nickName=reader.next();
+						exist=controller.validateNickName(nickName);
+						if(exist==true){
+							msj="Ya existe este nickName";
+						}	
+						else{
+							System.out.println("cual es  su cedula");
+							id=reader.next();
+							System.out.println("cual es su fecha de vinculación");
+							date=reader.next();
+							Standard standar=new Standard(name,date,url);
+							control=controller.addConsumer(standar);
+							if(control==true){
+								msj="Se creo el usuario Standar";
 
-						System.out.println(msj);
+							}
+							else{
+								msj="No se pudo crear el usuario Standar ";
+							}
+						}
+					}
+
+					System.out.println(msj);	
 					
 								
 		
