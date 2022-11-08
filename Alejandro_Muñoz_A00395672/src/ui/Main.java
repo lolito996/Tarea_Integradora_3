@@ -1,5 +1,6 @@
 package ui;
 
+import java.time.Duration;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
@@ -74,6 +75,12 @@ public class Main {
 		String date="";
 		String url="";
 		String id= "";
+		String album="";
+		String description="";
+		int validate=0 ;
+		int type=0;
+		double duration=0;
+		double price=0;
 		boolean control=false;
 		switch(option){
 
@@ -99,9 +106,9 @@ public class Main {
 							date=reader.next();
 							System.out.println("cual es la url de tu imagen ");
 							url=reader.next();
-							Producers producer=new Artists(name,date,url);
-							control=controller.addProducers(producer);
-								if(control==true){
+							validate=0;
+							control=controller.addProducers(name,date,url,validate);
+							if(control==true){
 								msj="Se creo el artista";
 
 							}else{
@@ -115,8 +122,7 @@ public class Main {
 							date=reader.next();
 							System.out.println("cual es la url de tu imagen ");
 							url=reader.next();
-							ContentCreators contentCreator=new ContentCreators(name,date,url);
-							control=controller.addProducers(contentCreator);
+							control=controller.addProducers(name,date,url,validate);
 								if(control==true){
 								msj="Se creo el creador de contenido ";
 
@@ -130,18 +136,19 @@ public class Main {
 				break;
 
 				case 2: 
-				System.out.println("Deseas registrar 1) PREMIUM  o  2) STANDAR");
-				do{	
-					if(reader.hasNextInt()){
-					typeCreator=reader.nextInt();
-					if(typeCreator!=1 && typeCreator!=2){
-						System.out.println("Opcion invalida");
-					}
-					}else{
-						reader.next();
-						System.out.println("Opcion invalida ");
-					}
-				}while(typeCreator!=1 && typeCreator!=2);
+					System.out.println("Deseas registrar 1) PREMIUM  o  2) STANDAR");
+					do{	
+						if(reader.hasNextInt()){
+						typeCreator=reader.nextInt();
+							if(typeCreator!=1 && typeCreator!=2){
+								System.out.println("Opcion invalida");
+							}
+						}
+						else{
+							reader.next();
+							System.out.println("Opcion invalida ");
+						}
+					}while(typeCreator!=1 && typeCreator!=2);
 					if(typeCreator==1){
 						System.out.println("Crea un nickName");
 						nickName=reader.next();
@@ -154,8 +161,8 @@ public class Main {
 							id=reader.next();
 							System.out.println("cual es su fecha de vinculación");
 							date=reader.next();
-							Premium premium=new Premium(name,date,url);
-							control=controller.addConsumer(premium);
+							validate=0;
+							control=controller.addConsumer(nickName,id,date,validate);
 							if(control==true){
 								msj="Se creo el usuario Premium";
 
@@ -177,8 +184,7 @@ public class Main {
 							id=reader.next();
 							System.out.println("cual es su fecha de vinculación");
 							date=reader.next();
-							Standard standar=new Standard(name,date,url);
-							control=controller.addConsumer(standar);
+							control=controller.addConsumer(nickName,id,date,validate);
 							if(control==true){
 								msj="Se creo el usuario Standar";
 
@@ -191,16 +197,57 @@ public class Main {
 
 					System.out.println(msj);	
 					
-								
 		
-					break; 
+				break; 
 
-					case 3: 
-						
+				case 3: 
+					System.out.println("Deseas registrar 1) CANCIÓN  o  2) PODCAST");
+					do{	
+						if(reader.hasNextInt()){
+						typeCreator=reader.nextInt();
+							if(typeCreator!=1 && typeCreator!=2){
+								System.out.println("Opcion invalida");
+							}
+						}
+						else{
+							reader.next();
+							System.out.println("Opcion invalida ");
+						}
+					}while(typeCreator!=1 && typeCreator!=2);
+					if(typeCreator==1){
+						System.out.println("cual es el nombre ");
+							name=reader.next();
+							System.out.println("cual es  el Album");
+							album=reader.next();
+							msj=controller.printTypeCancion();
+							System.out.println(msj);
+							type=reader.nextInt();
+							System.out.println("cual es la url ");
+							url=reader.next();
+							System.out.println("cual es la duracion ");
+							duration=reader.nextDouble();
+							System.out.println("cual es el precio ");
+							price=reader.nextDouble();
+							msj=controller.addCancion(name, album, type, url, duration,price);
+					}else{
+						System.out.println("cual es el nombre ");
+							name=reader.next();
+							System.out.println("cual es la descripcion");
+							description=reader.next();
+							msj=controller.printTypePodcast();
+							System.out.println(msj);
+							type=reader.nextInt();
+							System.out.println("cual es la url ");
+							url=reader.next();
+							System.out.println("cual es la duracion ");
+							duration=reader.nextDouble();
+							msj=controller.addPodcast(name, album, type, url, duration);
+						}
+						System.out.println(msj);
 
-						break;
+				break;
 
-					case 4: 
+				case 4: 
 
 						break;
 
