@@ -12,15 +12,15 @@ public class Controller {
     private Gender gender;
     private Type typePodcast;
     private ArrayList<Producers>producers;
-    private Consumers consumer;
-    private ArrayList<Cancion> canciones;
-    private ArrayList<Podcast> podcasts;
+    private ArrayList <Consumers> consumer;
+    private ArrayList<Audio>audios;
+    private ArrayList<Playlist>playlists;
     
     public Controller(){
         consumers =new ArrayList<Consumers>();
         producers =new ArrayList<Producers>();
-        canciones=new ArrayList<Cancion>();
-        podcasts=new ArrayList<Podcast>();        
+        audios =new ArrayList<Audio>(); 
+        playlists=new ArrayList<Playlist>();
     }
     public boolean addProducers(String name,String date,String url,int validate){
         boolean create=false;
@@ -44,31 +44,56 @@ public class Controller {
         }
         return  create;
     }
+    public boolean addPLaylist(String name,String url){
+        boolean exist=false;
+        for (int i =0;i<playlists.size();i++){
+            if(playlists.get(i)==null){
+                playlists.get(i)=new Playlist(name,url);
+            }
+        }
+        
+    }
     public String addCancion(String name,String album,int genero,String url,double duration,double price){
         String msj="";
         Gender gender=defineTypeGender(genero);
         boolean create=false;
-        Cancion cancion=new Cancion(name,album,gender, url, duration, price);
-        create= canciones.add(cancion);
-        if(create==true ){
-            msj="Se creo la canción";
+
+            Cancion cancion=new Cancion(name,album,gender, url, duration, price);
+            create=audios.add(cancion);
+        if(create==true){
+            msj="Se agrego la cancion";
         }else{
-            msj="No se pudo crea nada ";
+            msj="No se pudo crear la cancion";
         }
-        return  msj;
+        return msj;
+
     }
     public String addPodcast(String name,String description,int genero,String url,double duration){
         String msj="";
         Type typePodcast=defineTypePodcast(genero);
         boolean create=false;
         Podcast podcas=new Podcast(name,description,typePodcast, url, duration);
-        create= podcasts.add(podcas);
-        if(create==true ){
-            msj="Se creo la canción";
-        }else{
-            msj="No se pudo crea nada ";
+        create= audios.add(podcas);
+        if(create==true){
+            msj="Se creo el podcas";
+        }
+        else{
+            msj="No se pudo crear el podcast";
         }
         return  msj;
+    }
+    public boolean validateNameCancion(String name){
+        boolean exist=false;
+        boolean isFound=false;
+        for(int i=0;i<audios.size() & !isFound;i++){
+            if(audios.get(i)!=null && audios.get(i) instanceof Cancion){
+                if(audios.get(i).getName().equals(name)){
+                    isFound=true;
+                    exist=true;
+                }
+            }
+        }
+        return exist;
     }
 
 
@@ -138,4 +163,53 @@ public class Controller {
         "3)Trap\n"+
         "4)House";
     }
+    public String printTypePLayList(){
+        return 
+        "Canciones "+
+        "Podcast"+
+        "Canciones y Podcast";
+    }
+    public String printCanciones(){
+        String msj= "";
+        for(int i=0;i<audios.size();i++){
+            if(audios.get(i)!=null && audios.get(i) instanceof Cancion){
+                msj+=audios.get(i).getName()+"\n";
+            }
+        }
+        return msj;
+    }
+    public String printPodcast(){
+
+        String msj="";
+        for(int i=0;i<audios.size();i++){
+            if(audios.get(i)!=null && audios.get(i) instanceof Podcast){
+                msj+=audios.get(i).getName()+"\n";
+            }
+        }
+
+        return msj;
+    }
+
+    public String printAllAudio(){
+        String msj="";
+        for(int i=0;i<audios.size();i++){
+            if(audios.get(i)!=null){
+                msj+=audios.get(i).getName();
+            }
+        }
+        return msj;
+    }
+    
+    public int searchUserByNickName(String nickName){
+        int pos = -1;
+        boolean isFound = false;
+        for(int i = 0;i<consumers.size() && !isFound;i++){
+            if(consumers.get(i).getNickName().equalsIgnoreCase(nickName)){
+                pos = i;
+                isFound = true;
+            }  
+        }
+        return pos;
+    }
+   
 }

@@ -68,9 +68,12 @@ public class Main {
 
 	public void executeOption(int option){
 		int typeCreator =0;
+		int pos=-1;
+		int totalObjects=-1;
 		String nickName="";
 		boolean exist=false;
 		String msj="";
+		String namePlaylist="";
 		String name="";
 		String date="";
 		String url="";
@@ -79,6 +82,7 @@ public class Main {
 		String description="";
 		int validate=0 ;
 		int type=0;
+		int count=0;
 		double duration=0;
 		double price=0;
 		boolean control=false;
@@ -248,18 +252,56 @@ public class Main {
 				break;
 
 				case 4: 
+				System.out.println("Escribe el nickname");
+				nickName = reader.next();
+				pos =controller.searchUserByNickName(nickName);
+				if(pos!=-1){
+					System.out.println("Escribe el nombre de la playlist");
+					namePlaylist = reader.next();
+					System.out.println("Elige el tipo de playlist\n");
+					msj=controller.printTypePLayList();
+					System.out.println(msj);
+					do{typeCreator=reader.nextInt();
+						if(typeCreator==1 | typeCreator==2 | typeCreator==3){
+							System.out.println("Esa vaina no existe");
+						}
+					}while(typeCreator==1 | typeCreator==2 | typeCreator==3);				
+					if(typeCreator==1){
+						System.out.println("Cuantos canciones deseas almacenar ");
+						totalObjects=reader.nextInt();
+						do{
+							System.out.println(controller.printCanciones());
+							System.out.println("Escribe el nombre de la cancion ");
+							name = reader.next();
+							exist=controller.validateNameCancion(name);
+							
+							if(exist==true){
+								
+							}
+							else{
+							System.out.println("No existe la cancion");
+							}
+						}while(count==totalObjects);
+						
+					}
+						
+					
+				}
+				else{
+					msj=" No se encontro el usuario ";
+					}
+				System.out.println(msj);
+			    break;
 
-						break;
-
-					case 0: 
-						System.out.println("Exit program.");
-						break; 
-
-					default: 
-						System.out.println("Invalid Option");
+				case 0: 
+					System.out.println("Exit program.");
 				break; 
-			}
+
+				default: 
+					System.out.println("Invalid Option");
+				break; 
 		}
+	}
 
 	public int validateIntegerOption(){
 			int option = 0; 

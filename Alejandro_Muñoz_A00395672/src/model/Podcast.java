@@ -1,18 +1,17 @@
 package model;
 
-public class podcast {
-    private String name;
+import javax.sound.sampled.AudioFileFormat;
+
+public class Podcast extends Audio {
     private String description;
     private Type typePodcast;
-    private String url;
     private double duration;
     private int numberReplay;
     
-    public podcast(String name,String description,Type typePodcast,String url,double duration){
-        this.name=name;
+    public Podcast(String name,String description,Type typePodcast,String url,double duration){
+        super(name,url);
         this.description=description;
         this.typePodcast=typePodcast;
-        this.url=url;
         this.duration=duration;
     }
 }
