@@ -62,12 +62,13 @@ public class Main {
 		"1. Registrar usuarios productores, artistas y creadores de contenido.\n" +
 		"2. Registrar usuarios consumidores, Estandar, Premium \n" + 
 		"3. Reggistrar 	canciones y podcast\n" +
-		"4. Bajar a una persona del carro autonomo\n" +
+		"4. crear una playlist a un consummidor\n" +
 		"0. Salir del programa.\n"; 
 	}
 
 	public void executeOption(int option){
 		int typeCreator =0;
+		boolean create=false;
 		int pos=-1;
 		int totalObjects=-1;
 		String nickName="";
@@ -225,7 +226,13 @@ public class Main {
 							album=reader.next();
 							msj=controller.printTypeCancion();
 							System.out.println(msj);
-							type=reader.nextInt();
+							
+							do{
+								type=reader.nextInt();
+								if(type != 1 | type !=2 | type!=3 |type!=4 ){
+									System.out.println("Opcion invalida");
+								}
+							}while(type == 1 | type ==2 | type==3 |type==4 );
 							System.out.println("cual es la url ");
 							url=reader.next();
 							System.out.println("cual es la duracion ");
@@ -258,40 +265,79 @@ public class Main {
 				if(pos!=-1){
 					System.out.println("Escribe el nombre de la playlist");
 					namePlaylist = reader.next();
+					System.out.println("Escribe la url de la playlist ");
+					url=reader.next();
 					System.out.println("Elige el tipo de playlist\n");
 					msj=controller.printTypePLayList();
 					System.out.println(msj);
 					do{typeCreator=reader.nextInt();
-						if(typeCreator==1 | typeCreator==2 | typeCreator==3){
-							System.out.println("Esa vaina no existe");
+						if(typeCreator>3 | typeCreator<1){
+							System.out.println("Ese  tipo de playlist no existe");
+							typeCreator=-1;
 						}
-					}while(typeCreator==1 | typeCreator==2 | typeCreator==3);				
+					}while(typeCreator!=-1);	
+					controller.addPLaylist(namePlaylist, url, typeCreator);			
 					if(typeCreator==1){
 						System.out.println("Cuantos canciones deseas almacenar ");
 						totalObjects=reader.nextInt();
 						do{
+							count=0;
 							System.out.println(controller.printCanciones());
 							System.out.println("Escribe el nombre de la cancion ");
 							name = reader.next();
 							exist=controller.validateNameCancion(name);
-							
 							if(exist==true){
-								
+								count ++;
+								msj=controller.addPlaylistConsumer(nickName,namePlaylist,typeCreator,name);
 							}
 							else{
 							System.out.println("No existe la cancion");
 							}
 						}while(count==totalObjects);
-						
-					}
-						
-					
+					}if(typeCreator==2){
+						System.out.println("Cuantos canciones deseas almacenar ");
+						totalObjects=reader.nextInt();
+						do{
+							count=0;
+							System.out.println(controller.printPodcast());
+							System.out.println("Escribe el nombre de el podcast ");
+							name = reader.next();
+							exist=controller.validateNamePodcast(name);
+							if(exist==true){
+								count++;
+								msj=controller.addPlaylistConsumer(nickName,namePlaylist,typeCreator,name);
+							}
+							else{
+							System.out.println("No existe el podcast");
+							}
+						}while(count==totalObjects);
+						if(typeCreator==3){
+							System.out.println("Cuantos audios  deseas almacenar ");
+							totalObjects=reader.nextInt();
+						do{
+							count=0;
+							System.out.println(controller.printAllAudio());
+							System.out.println("Escribe el nombre de el audio que deseas almacenar ");
+							name = reader.next();
+							exist=controller.validateAudio(name);
+							if(exist==true){
+								count++;
+								msj=controller.addPlaylistConsumer(nickName,namePlaylist,typeCreator,name);
+							}
+							else{
+								System.out.println("No existe el audio");
+							}
+						}
+							while(count==totalObjects);
+						}
+					}		
 				}
 				else{
 					msj=" No se encontro el usuario ";
 					}
 				System.out.println(msj);
 			    break;
+				case 5:
 
 				case 0: 
 					System.out.println("Exit program.");

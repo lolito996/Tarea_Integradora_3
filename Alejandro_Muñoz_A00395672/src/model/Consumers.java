@@ -1,4 +1,5 @@
 package model;
+import java.sql.Array;
 import java.util.ArrayList;
 
 public  abstract class Consumers  {
@@ -22,5 +23,8 @@ public  abstract class Consumers  {
     public String getNickName(){
         return this.nickName;
     }
+
+
+     
     
 }

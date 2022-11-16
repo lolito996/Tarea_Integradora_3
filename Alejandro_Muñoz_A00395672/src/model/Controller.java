@@ -1,27 +1,35 @@
 package model;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import model.*;
 
 
 public class Controller {
-    public static final int TOTAL_CANCIONES=100000;
-
 
     private ArrayList<Consumers>consumers;
     private Gender gender;
     private Type typePodcast;
+    private TypePlaylist typePlaylist;
     private ArrayList<Producers>producers;
-    private ArrayList <Consumers> consumer;
     private ArrayList<Audio>audios;
     private ArrayList<Playlist>playlists;
     
+    /**
+     * 
+     */
     public Controller(){
         consumers =new ArrayList<Consumers>();
         producers =new ArrayList<Producers>();
         audios =new ArrayList<Audio>(); 
         playlists=new ArrayList<Playlist>();
     }
+    /**
+     * @param name
+     * @param date
+     * @param url
+     * @param validate
+     * @return create
+     * in this method add producers in the arraylist whit name producers
+     */
     public boolean addProducers(String name,String date,String url,int validate){
         boolean create=false;
         if(validate==0){
@@ -33,6 +41,14 @@ public class Controller {
         }
         return create;
     }
+    /**
+     * @param nickName
+     * @param date
+     * @param url
+     * @param validate
+     * @return.
+     * in this method add consumer in the arraylist whit name consumers
+     */
     public boolean addConsumer(String nickName,String date,String url,int validate){
         boolean create=false;
         if(validate==0){
@@ -44,15 +60,17 @@ public class Controller {
         }
         return  create;
     }
-    public boolean addPLaylist(String name,String url){
-        boolean exist=false;
-        for (int i =0;i<playlists.size();i++){
-            if(playlists.get(i)==null){
-                playlists.get(i)=new Playlist(name,url);
-            }
-        }
-        
-    }
+  
+    /**
+     * @param name
+     * @param album
+     * @param genero
+     * @param url
+     * @param duration
+     * @param price
+     * @return
+     * int this method add cancion in the arraylist with name audios
+     */ 
     public String addCancion(String name,String album,int genero,String url,double duration,double price){
         String msj="";
         Gender gender=defineTypeGender(genero);
@@ -68,6 +86,31 @@ public class Controller {
         return msj;
 
     }
+    /**
+     * @param name
+     * @param url
+     * @param type
+     * create the playlist but don't have the return because first create the playlist and  after the playlist exist send  the consuers
+     */
+    public void addPLaylist(String name,String url,int type){
+        boolean exist=false;
+        typePlaylist=selecType(type);
+        for(int i=0;i<playlists.size();i++){
+            if(playlists.get(i)==null){
+                Playlist playlis=new Playlist(name,url,typePlaylist);
+                exist=playlists.add(playlis);
+            }
+        }
+    }
+
+    /**
+     * @param name
+     * @param description
+     * @param genero
+     * @param url
+     * @param duration
+     * @return
+     */
     public String addPodcast(String name,String description,int genero,String url,double duration){
         String msj="";
         Type typePodcast=defineTypePodcast(genero);
@@ -82,6 +125,43 @@ public class Controller {
         }
         return  msj;
     }
+    /**
+     * @param namePlaylist
+     * @param url
+     * @param type
+     * @param nickName
+     * @return
+     */
+    public String addPlaylistConsumer(String namePlaylist,String url,int type,String nickName){
+        String msj="";
+        Consumers consumer=searchUser(nickName);
+        typePlaylist=selecType(type);
+        if(consumer==null){
+            msj = "El usuario no está creado, no se puede añadir playlist";
+        }else{
+            if(consumer instanceof Standard){//Consumidor estándar
+                Standard objUser = (Standard) searchUser(nickName);
+                if(objUser.getCounterPlaylist()<=20){
+                    Playlist playlist = new Playlist(namePlaylist, url, typePlaylist);
+                    objUser.getPlaylists().add(playlist);
+                    objUser.setCounterPlaylist(+1);
+                    msj="Se creo el playlist con exito";
+                }else
+                    msj = "El usuario " + nickName + " ya tiene el total de playlists creadas";
+            }else{
+                Premium objUser = (Premium) searchUser(nickName);
+                Playlist playlist = new Playlist(namePlaylist, url, typePlaylist);
+                objUser.getPlaylists().add(playlist);
+                msj="Se creo el playlist con exito";
+            }
+        }
+
+        return msj;
+    }
+    /**
+     * @param name
+     * @return
+     */
     public boolean validateNameCancion(String name){
         boolean exist=false;
         boolean isFound=false;
@@ -95,8 +175,54 @@ public class Controller {
         }
         return exist;
     }
+    /**
+     * @param name
+     * @return
+     */
+    public boolean validateAudio(String name){
+        boolean exist=false;
+        boolean isFound=false;
+        for(int i =0;i<audios.size() &! isFound;i++){
+            if(audios.get(i).getName().equalsIgnoreCase(name)){
+                isFound=true;
+                exist=true;
+            }
+        }
+        return exist;
+    }
+    public boolean validateNamePodcast(String name){
+        boolean exist=false;
+        boolean isFound=false;
+        for(int i=0;i<audios.size() & !isFound;i++){
+            if(audios.get(i)!=null && audios.get(i) instanceof Podcast){
+                if(audios.get(i).getName().equals(name)){
+                    isFound=true;
+                    exist=true;
+                }
+            }
+        }
+        return exist;
+    }
 
-
+    /**
+     * @param nikName
+     * @return
+     */
+    public Consumers searchUser(String nikName){
+        boolean isFound=false;
+        Consumers consumer=null;
+        for (int i=0;i<consumers.size()& !isFound;i++){
+            if(consumers.get(i)!=null && consumers.get(i).getNickName().equalsIgnoreCase(nikName)){
+                consumer=consumers.get(i);
+                isFound=true;
+            }
+        }
+        return consumer;
+    }
+    /**
+     * @param nickName
+     * @return
+     */
     public boolean validateNickName(String nickName){
         boolean exist=false;
         boolean isFound=false;
@@ -108,6 +234,10 @@ public class Controller {
         }
         return exist;
     }
+    /**
+     * @param option
+     * @return
+     */
     public Gender defineTypeGender(int option){
         switch(option){
             case 1:
@@ -129,6 +259,10 @@ public class Controller {
         }
         return gender;
     }
+    /**
+     * @param option
+     * @return
+     */
     public Type defineTypePodcast(int option){
         switch(option){
             case 1:
@@ -150,12 +284,38 @@ public class Controller {
         }
         return typePodcast;
     }
+    /**
+     * @param option
+     * @return
+     */
+    public TypePlaylist selecType(int option){
+        switch(option){
+            case 1:
+            typePlaylist=TypePlaylist.AUDIO;
+            break;
+
+            case 2:
+            typePlaylist=TypePlaylist.PODCAST;
+            break;
+
+            case 3:
+            typePlaylist=TypePlaylist.BOTH;
+            break;
+        }
+        return typePlaylist;
+    }
+    /**
+     * @return
+     */
     public String printTypePodcast(){
         return "1) Política\n"+
         "2)Entretenimiento\n"+
         "3)Videojuegos\n"+
         "4)Moda";
     }
+    /**
+     * @return
+     */
     public String printTypeCancion(){
         return
         "1)Rock\n"+
@@ -163,12 +323,18 @@ public class Controller {
         "3)Trap\n"+
         "4)House";
     }
+    /**
+     * @return
+     */
     public String printTypePLayList(){
         return 
-        "Canciones "+
-        "Podcast"+
-        "Canciones y Podcast";
+        "1)Canciones \n"+
+        "2)Podcast\n"+
+        "3)Canciones y Podcast";
     }
+    /**
+     * @return
+     */
     public String printCanciones(){
         String msj= "";
         for(int i=0;i<audios.size();i++){
@@ -178,6 +344,9 @@ public class Controller {
         }
         return msj;
     }
+    /**
+     * @return
+     */
     public String printPodcast(){
 
         String msj="";
@@ -190,6 +359,9 @@ public class Controller {
         return msj;
     }
 
+    /**
+     * @return
+     */
     public String printAllAudio(){
         String msj="";
         for(int i=0;i<audios.size();i++){
@@ -200,6 +372,10 @@ public class Controller {
         return msj;
     }
     
+    /**
+     * @param nickName
+     * @return
+     */
     public int searchUserByNickName(String nickName){
         int pos = -1;
         boolean isFound = false;

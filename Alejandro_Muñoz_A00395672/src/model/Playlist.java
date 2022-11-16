@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public abstract class Playlist {
+public  class Playlist {
     public static final int ROWS=6;
     public static final int COLUMNS=6;
     private String name;
@@ -17,11 +17,12 @@ public abstract class Playlist {
 
     
 
-    public Playlist(String name,String url){
+    public Playlist(String name,String url,TypePlaylist type){
         this.name=name;
         this.url=url;
         this.audios =new ArrayList<>();
         this.matrix=new int[ROWS][COLUMNS];
+        this.type=type;
         generateMatrix();
         playlist=new ArrayList<Audio>();
 
@@ -107,11 +108,10 @@ public abstract class Playlist {
         }
         return msj;
     }
-
     public String addAudio(Audio newAudio){
         String msj = "";
         if(type == TypePlaylist.AUDIO){
-            if(newAudio instanceof Audio){
+            if(newAudio instanceof Cancion){
                 playlist.add(newAudio);
                 msj = "cancion agregada";
             }else{
@@ -130,4 +130,6 @@ public abstract class Playlist {
         }
         return msj;
     }
+
+
 }
