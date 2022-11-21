@@ -91,7 +91,6 @@ public class Main {
 		double duration=0;
 		double price=0;
 		boolean control=false;
-		String[] namesAudio = new String[1000];
 		switch(option){
 
 				case 1: 
