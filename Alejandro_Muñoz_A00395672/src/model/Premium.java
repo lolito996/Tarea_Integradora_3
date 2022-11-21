@@ -6,8 +6,6 @@ import model.Playlist;
 public class Premium extends Consumers {
     public static final int accesPremiun=1000000000;
     private ICanción cancion;
-    private int totalCanciones;
-    private int totalListReproduction;
     private ArrayList<Playlist>playlists;
     
     public Premium(String nickName,String id,String dateVinculation){
@@ -20,6 +18,18 @@ public class Premium extends Consumers {
     public void setPlaylist(ArrayList<Playlist> newPlaylists){
         this.playlists=newPlaylists;
     }
+    public String playAudio(String name, ArrayList<Audio> audiosPrincipal) {
+        String msg = "";
+        for(Audio audio : audiosPrincipal){
+            if(audio.getName().equalsIgnoreCase(name)){
+                msg = "Reproduciendo\n" + audio.getName();
+            }else {
+                msg = "Audio no encontrado";
+            }
+        }
+        return msg;
+    }
+
   
    
     

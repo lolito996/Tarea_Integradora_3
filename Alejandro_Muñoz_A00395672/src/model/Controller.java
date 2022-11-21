@@ -56,7 +56,7 @@ public class Controller {
            create= consumers.add(standar);
         }else{
             Premium premium=new Premium(nickName, url, date);
-           create=consumers.add(premium);
+            create=consumers.add(premium);
         }
         return  create;
     }
@@ -85,22 +85,6 @@ public class Controller {
         }
         return msj;
 
-    }
-    /**
-     * @param name
-     * @param url
-     * @param type
-     * create the playlist but don't have the return because first create the playlist and  after the playlist exist send  the consuers
-     */
-    public void addPLaylist(String name,String url,int type){
-        boolean exist=false;
-        typePlaylist=selecType(type);
-        for(int i=0;i<playlists.size();i++){
-            if(playlists.get(i)==null){
-                Playlist playlis=new Playlist(name,url,typePlaylist);
-                exist=playlists.add(playlis);
-            }
-        }
     }
 
     /**
@@ -132,29 +116,32 @@ public class Controller {
      * @param nickName
      * @return
      */
-    public String addPlaylistConsumer(String namePlaylist,String url,int type,String nickName){
+    public String addPlaylistConsumer(String nickName,String namePlaylist,int type){
         String msj="";
         Consumers consumer=searchUser(nickName);
         typePlaylist=selecType(type);
         if(consumer==null){
             msj = "El usuario no está creado, no se puede añadir playlist";
-        }else{
-            if(consumer instanceof Standard){//Consumidor estándar
-                Standard objUser = (Standard) searchUser(nickName);
-                if(objUser.getCounterPlaylist()<=20){
-                    Playlist playlist = new Playlist(namePlaylist, url, typePlaylist);
+        }   
+        else{
+                if(consumer instanceof Standard){//Consumidor estándar
+                    Standard objUser = (Standard) searchUser(nickName);
+                    if(objUser.getCounterPlaylist()<20){
+                    Playlist playlist = new Playlist(namePlaylist,typePlaylist);
                     objUser.getPlaylists().add(playlist);
                     objUser.setCounterPlaylist(+1);
                     msj="Se creo el playlist con exito";
-                }else
-                    msj = "El usuario " + nickName + " ya tiene el total de playlists creadas";
-            }else{
-                Premium objUser = (Premium) searchUser(nickName);
-                Playlist playlist = new Playlist(namePlaylist, url, typePlaylist);
-                objUser.getPlaylists().add(playlist);
-                msj="Se creo el playlist con exito";
+                    }else{
+                        msj = "El usuario " + nickName + " ya tiene el total de playlists creadas";
+                    }
+                }   
+                else{//Consumidor Premium
+                    Premium objUser = (Premium) searchUser(nickName);
+                    Playlist playlist = new Playlist(namePlaylist,typePlaylist);
+                    objUser.getPlaylists().add(playlist);
+                    msj="Se creo elplaylist con exito ";
+                }
             }
-        }
 
         return msj;
     }
@@ -190,6 +177,15 @@ public class Controller {
         }
         return exist;
     }
+
+    public void addAudioPlaylist(String namePlaylist,String nameAudio){
+        Playlist playlist=null;
+        Audio audio=null;
+        playlist=searchPLaylist(namePlaylist);
+        audio=searchAudio(nameAudio);
+        playlist.getAudios().add(audio);
+    }
+
     public boolean validateNamePodcast(String name){
         boolean exist=false;
         boolean isFound=false;
@@ -204,6 +200,51 @@ public class Controller {
         return exist;
     }
 
+    public Playlist getPlaylist(String name){
+        Playlist playlist=null;
+        boolean flag=false;
+
+        for (int i =0; i<playlists.size() & ! flag;i++){
+            if(playlists.get(i).getName().equalsIgnoreCase(name)){
+                playlist=playlists.get(i);
+                flag =true;
+            }
+        }
+        return playlist;
+
+    }
+
+
+    public  String sharePlayList(String nickname,String namePlaylist){
+        String msj="";
+        Playlist playlis=null;
+        Consumers consumer;
+        consumer=searchUser(nickname);
+        playlis= searchPLaylist(namePlaylist);{
+            if(playlis==null){
+                msj="No existe esa playList";
+            }else{
+                if(consumer instanceof Standard){//Consumidor estándar
+                    Standard objUser = (Standard) searchUser(nickname);
+                    if(objUser.getCounterPlaylist()<20){
+                    objUser.getPlaylists().add(playlis);
+                    objUser.setCounterPlaylist(+1);
+                    msj="Se compartio la playlist con exito";
+                    }else{
+                        msj = "El usuario " + nickname + " ya tiene el total de playlists creadas";
+                    }
+                }   
+                else{//Consumidor Premium
+                    Premium objUser = (Premium) searchUser(nickname);
+                    objUser.getPlaylists().add(playlis);
+                    msj="Se compartio la  playlist con exito ";
+                }
+            }
+        }
+
+        return msj;
+    }
+
     /**
      * @param nikName
      * @return
@@ -212,13 +253,105 @@ public class Controller {
         boolean isFound=false;
         Consumers consumer=null;
         for (int i=0;i<consumers.size()& !isFound;i++){
-            if(consumers.get(i)!=null && consumers.get(i).getNickName().equalsIgnoreCase(nikName)){
-                consumer=consumers.get(i);
-                isFound=true;
+            if(consumers.get(i)!=null){
+                if(consumers.get(i).getNickName().equals(nikName)){
+                    consumer=consumers.get(i);
+                    isFound=true;
+                }
             }
         }
         return consumer;
     }
+    public Audio searchAudio(String nameAudio){
+        Audio audio=null;
+        boolean flag=false;
+        for(int i =0;i<audios.size() & ! flag;i++){
+            if(audios.get(i).getName().equalsIgnoreCase(nameAudio)){
+                audio=audios.get(i);
+                flag =true;
+            }
+        }
+        return audio;
+    } 
+
+
+
+
+    public Playlist searchPLaylist(String name){
+        boolean flag=false;
+        Playlist playlis=null;
+        for(int i=0;i<playlists.size()& !flag;i++){
+            if(playlists.get(i).getName().equalsIgnoreCase(name)){
+                playlis=playlists.get(i);
+                flag=false;
+            }
+        }
+        return playlis;
+    }
+
+    public String addDeleteAudioPlaylist(String idConsumer, String namePlaylist, String nameAudio, int option){
+        String msg = "Cambio realizado exitosamente";
+        Consumers objU = searchUser(idConsumer);
+        Audio objA = searchAudio(nameAudio);
+
+        if(objU==null){
+            msg = "El usuario no está creado, no se puede añadir playlist";
+        }else {
+            if(option==1){//add
+                if(objU instanceof Standard){
+                    Standard objUser = (Standard) searchUser(idConsumer);
+                    for(Playlist playlist : objUser.getPlaylists()){
+                        if(playlist.getName().equalsIgnoreCase(namePlaylist)){
+                            playlist.getAudios().add(objA);
+                        }
+                    }
+                }else {
+                    Premium objUser = (Premium) searchUser(idConsumer);
+                    for(Playlist playlist : objUser.getPlaylists()){
+                        if(playlist.getName().equalsIgnoreCase(namePlaylist)){
+                            playlist.getAudios().add(objA);
+                        }
+                    }
+                }
+            } else if (option==2) {
+                if(objU instanceof Standard){
+                    Standard objUser = (Standard) searchUser(idConsumer);
+                    for(Playlist playlist : objUser.getPlaylists()){
+                        if(playlist.getName().equalsIgnoreCase(namePlaylist)){
+                            playlist.getAudios().remove(objA);
+                        }
+                    }
+
+                }else {
+                    Premium objUser = (Premium) searchUser(idConsumer);
+                    for(Playlist playlist : objUser.getPlaylists()){
+                        if(playlist.getName().equalsIgnoreCase(namePlaylist)){
+                            playlist.getAudios().remove(objA);
+                        }
+                    }
+                }
+            }
+        }
+        return msg;
+    }
+    public String reproduceAudio(String idConsumer, String nameAudio){
+        String msg = "";
+        Consumers objU = searchUser(idConsumer);
+        if(objU==null){
+            msg="El usuario no está creado";
+        }else{
+            if(objU instanceof Premium){
+                Premium objUser = (Premium) searchUser(idConsumer);
+                msg = objUser.playAudio(nameAudio, audios);
+            }else {
+                Standard objUser = (Standard) searchUser(idConsumer);
+                msg = objUser.playAudio(nameAudio, audios);
+            }
+        }
+        return msg;
+    }
+
+
     /**
      * @param nickName
      * @return
@@ -332,6 +465,13 @@ public class Controller {
         "2)Podcast\n"+
         "3)Canciones y Podcast";
     }
+    public String printPlaylist(){
+        String msj="";
+        for (int i=0;i<playlists.size();i++){
+            msj+=" Nombre  de la playlist "+ playlists.get(i).getName()+"\n";
+        }
+        return msj;
+    }
     /**
      * @return
      */
@@ -380,7 +520,7 @@ public class Controller {
         int pos = -1;
         boolean isFound = false;
         for(int i = 0;i<consumers.size() && !isFound;i++){
-            if(consumers.get(i).getNickName().equalsIgnoreCase(nickName)){
+            if(consumers.get(i).getNickName().equals(nickName)){
                 pos = i;
                 isFound = true;
             }  

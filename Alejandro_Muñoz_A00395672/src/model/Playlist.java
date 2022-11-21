@@ -6,8 +6,8 @@ import java.util.Random;
 public  class Playlist {
     public static final int ROWS=6;
     public static final int COLUMNS=6;
+    
     private String name;
-    private String url;
     private String id;
     private TypePlaylist type;
     private ArrayList<Audio> audios;
@@ -17,10 +17,9 @@ public  class Playlist {
 
     
 
-    public Playlist(String name,String url,TypePlaylist type){
+    public Playlist(String name,TypePlaylist type){
         this.name=name;
-        this.url=url;
-        this.audios =new ArrayList<>();
+        this.audios =new ArrayList<Audio>();
         this.matrix=new int[ROWS][COLUMNS];
         this.type=type;
         generateMatrix();
@@ -33,6 +32,9 @@ public  class Playlist {
                 matrix [i][j]=random.nextInt(9);
             }
         }
+    }
+    public String getName(){
+        return this.name;
     }
 
     public String calculateId(TypePlaylist type){
@@ -129,6 +131,9 @@ public  class Playlist {
             msj = "audio anadido";
         }
         return msj;
+    }
+    public ArrayList<Audio> getAudios(){
+        return audios;
     }
 
 
