@@ -41,6 +41,7 @@ public class Controller {
         }
         return create;
     }
+ 
     /**
      * @param nickName
      * @param date
@@ -212,6 +213,30 @@ public class Controller {
         }
         return playlist;
 
+    }
+
+    public String buyAudio(String nickName,String nameAudio){
+        String msj="No se prudo comprar el audio";
+        Consumers consumer=searchUser(nickName);
+        Audio audio=searchAudio(nameAudio);
+        if(consumer instanceof Standard ){
+            Standard objUser = (Standard) searchUser(nickName);
+            int acces=objUser.getAccesStandar();
+            if(acces<100){
+                objUser.getAudios().add(audio);
+                objUser.setAudios(+1);
+                msj="Se compro con exito la cancion";
+            }else{
+                msj="No se puede comprar mas canciones llegaste al limite ";
+            }
+        }else{
+            Premium objeSub =(Premium) searchUser(nickName);
+            objeSub.getaudios().add(audio);
+            msj="Se compro con exito tu Audio";
+
+        }
+
+        return msj;
     }
 
 

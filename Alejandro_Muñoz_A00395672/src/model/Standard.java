@@ -1,5 +1,7 @@
 package model;
 import java.util.ArrayList;
+import model.Playlist;
+import model.Audio;
 
 public class Standard extends Consumers {
     public static final int TOTAL_ADVERSITING=3;
@@ -7,14 +9,18 @@ public class Standard extends Consumers {
     private int counterSongs =0;
     private String [] advertising;
     private int getCounterPlaylist=0;
+    private int accesStandar=100;
     private ArrayList<Playlist>playlists;
+    private ArrayList<Audio>audios;
 
     
     public Standard(String nickName,String id,String dateVinculation){
         super(nickName, id,dateVinculation);
         playlists=new ArrayList<Playlist>(); 
+        audios=new ArrayList<Audio>();
         advertising=new String[TOTAL_ADVERSITING];
         inicialitedPublicitary();
+
     }
     public int getCounterPlaylist(){
         return this.getCounterPlaylist;
@@ -22,6 +28,17 @@ public class Standard extends Consumers {
     public void setCounterPlaylist(int newCounter){
         this.getCounterPlaylist=newCounter;
     }
+    public ArrayList<Audio> getAudios(){
+        return audios;
+    }
+    public void setAudios(int count){
+        this.accesStandar=count;
+    }
+    public int getAccesStandar(){
+        return this.accesStandar;
+    }
+
+
     public void inicialitedPublicitary(){
         advertising[0]=new String("Nike - Just Do It.");
         advertising[1]=new String ("Coca-Cola - Open Happiness.");

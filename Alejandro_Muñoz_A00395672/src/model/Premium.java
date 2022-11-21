@@ -1,19 +1,23 @@
 package model;
-import model.ICanción;
 import java.util.ArrayList;
 import model.Playlist;
+import model.Audio;
 
 public class Premium extends Consumers {
-    public static final int accesPremiun=1000000000;
-    private ICanción cancion;
     private ArrayList<Playlist>playlists;
+    private ArrayList<Audio>audios;
     
     public Premium(String nickName,String id,String dateVinculation){
         super(nickName, id,dateVinculation); 
         playlists=new ArrayList<Playlist>();
+        audios =new ArrayList<Audio>();
     }
     public ArrayList<Playlist> getPlaylists(){
         return playlists;
+    }
+    public ArrayList<Audio> getaudios(){
+        return audios;
+
     }
     public void setPlaylist(ArrayList<Playlist> newPlaylists){
         this.playlists=newPlaylists;

@@ -404,6 +404,24 @@ public class Main {
 				break;
 
 				case 8:
+				System.out.println("Cual es el nickname");
+				nickName=reader.next();
+				exist=controller.validateNickName(nickName);
+				if(exist==true){
+					System.out.println(controller.printAllAudio());
+					name=reader.next();
+					exist=controller.validateAudio(name);
+					if(exist=true){
+
+						msj=controller.buyAudio(nickName,name);
+					}else{
+						msj="No se encontro el audio";
+					}
+
+				}else{
+					msj="No se encontro el usuario";
+				}
+				System.out.println(msj);
 				
 
 
